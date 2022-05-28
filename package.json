@@ -1,18 +1,12 @@
 {
-  "name": "my-nuxt3",
-  "version": "1.0.0",
-  "description": "学习nuxt.js",
-  "author": "daipeng",
   "private": true,
   "scripts": {
-    "dev": "nuxt",
     "build": "nuxt build",
-    "start": "nuxt start",
-    "generate": "nuxt generate"
+    "dev": "nuxt dev",
+    "generate": "nuxt generate",
+    "preview": "nuxt preview"
   },
-  "dependencies": {
-    "nuxt": "^2.0.0",
-    "element-ui": "^2.4.11"
-  },
-  "devDependencies": {}
+  "devDependencies": {
+    "nuxt": "3.0.0-rc.3"
+  }
 }
