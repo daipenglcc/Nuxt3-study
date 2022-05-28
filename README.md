@@ -59,7 +59,7 @@ $ npm run generate
 ```
 
 ### nginx代理
-使用nginx做代理，想项目域名代理到localhost:3000上面
+使用nginx做代理，将项目域名代理到localhost:3000上面
 ```bash
 server {
     listen 80;
