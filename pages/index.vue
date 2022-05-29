@@ -7,6 +7,7 @@
 			<NuxtLink to="/goods-jspang/demo3-38">Demo3.vue</NuxtLink><br />
 			<NuxtLink to="/parent/one">/parent/one</NuxtLink><br />
 			<NuxtLink to="/parent/two">/parent/two</NuxtLink><br />
+			<TestMyButton />
 		</template>
 		<template #two>
 			<div>

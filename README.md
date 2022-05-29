@@ -160,3 +160,11 @@ $ pm2 save                       # 保存当前应用列表
 ### nuxt.js 官网
 
 [Nuxt.js docs](https://nuxtjs.org).
+
+### 掘金教程
+
+[掘金教程](https://juejin.cn/post/7037336504418435103)
+
+### jishupang 教程
+
+[jishupang 教程](https://jspang.com/article/86#toc0)
