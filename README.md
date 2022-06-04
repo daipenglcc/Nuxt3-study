@@ -49,55 +49,33 @@ $ npm run generate
   $ node -v
 ```
 
-### 拷贝文件
-
-- 本地执行
+### 本地打包
 
 ```bash
   $ npm run build
 ```
 
-- 拷贝下面的文件至服务器部署目录
-  - 打包生成的：.nuxt
-  - 项目本身的：static、nuxt.config.js、package.json、pm2.json
+### 目录拷贝
 
-### 服务器执行 npm install
+- 拷贝打包生成的.output 至服务器部署目录
+
+### 服务器执行
+
+直接启动
 
 ```bash
-  $ npm install
   $ npm run start
 ```
 
-### nginx 代理
-
-使用 nginx 做代理，将项目域名代理到 localhost:3000 上面
+通过 pm2 启动
 
 ```bash
-server {
-    listen 80;
-    server_name www.test.com;
-
-    location / {
-        root /opt/deploy; # 前端文件目录
-        proxy_pass http://127.0.0.1:3000;
-    }
-
-}
+  $ pm2 start .output/server/index.mjs
+  # ===等价于===
+  $ pm2 start npm --watch --name XXX -- run start ==> 本地：npm run start
 ```
 
-启动 nginx 后可以访问域名看到项目
-
-### pm2 守护进程
-
-对于线上项目，如果直接通过 node app 来启动，如果报错了可能直接停止导致整个服务崩溃，我们可以使用 pm2 对 node 进程管理
-
-- 安装
-
-```bash
-$ npm install pm2 -g
-```
-
-- 项目根目录创建 pm2.json
+通过 json 文件启动，项目根目录创建 pm2.json
 
 ```bash
 [
@@ -114,25 +92,58 @@ $ npm install pm2 -g
 ]
 ```
 
-- 启动 pm2
-
 ```bash
 $ cd /opt/deploy
 $ pm2 start pm2.json
 ```
 
+### nginx 代理
+
+使用 nginx 做代理，将项目域名代理到 localhost:3000 ，启动 nginx 后可以访问域名看到项目
+
+```bash
+server {
+    listen 80;
+    server_name www.test.com;
+
+    location / {
+        root /opt/deploy; # 前端文件目录
+        proxy_pass http://127.0.0.1:3000;
+    }
+}
+```
+
+### pm2 守护进程
+
+对于线上项目，如果不进行打包构建，而是直接通过 node app 来热启动，如果进程报错了可能直接导致整个服务崩溃停止。另外在终端窗口很多的情况下，容易产生误操作，难以管理。所以可以使用**pm2**来对**node 进程**进行批量管理操作
+
+- 介绍
+  **pm2**是一个带有负载均衡功能的 Node 应用的进程管理器，它会保证通过**pm2**启动的**node 进程**一致存活，永远杀不死。
+
+- 示例
+  [jishupang 教程](https://jspang.com/article/86#toc0)
+
+* 安装
+
+```bash
+$ npm install pm2 -g
+```
+
 - 常用 pm2 指令
 
 ```bash
+
+$ pm2 list                       # 列表 PM2 启动的所有的应用程序
+
+$ pm2 monit                      # 查看仪表盘，显示每个应用程序的CPU和内存占用情况
+
 $ pm2 start app.js               # 启动app.js应用程序
-​
-$ pm2 start app.js --name="demo"  # 启动应用程序并命名为 "demo"
+
+$ pm2 start app.js --name="demo" # 启动应用程序并命名为 "demo"
 ​
 $ pm2 start app.js --watch       # 当文件变化时自动重启应用
 ​
 $ pm2 start script.sh            # 启动 bash 脚本
-​
-$ pm2 list                       # 列表 PM2 启动的所有的应用程序
 ​
 $ pm2 show [app-name]            # 显示应用程序的所有信息
 ​
@@ -142,11 +153,11 @@ $ pm2 logs [app-name]            # 显示指定应用程序的日志
 ​
 $ pm2 stop all                   # 停止所有的应用程序
 ​
-$ pm2 stop 0                     # 停止 id为 0的指定应用程序
+$ pm2 stop 0                     # 停止id为 0的指定应用程序
 ​
 $ pm2 restart all                # 重启所有应用
 ​
-$ pm2 restart 0                  # 重启id为0 的应用程序
+$ pm2 restart 0                  # 重启id为0的应用程序
 ​
 $ pm2 delete all                 # 关闭并删除所有应用
 ​
@@ -155,6 +166,15 @@ $ pm2 delete 0                   # 删除指定应用 id 0
 $ pm2 startup                    # 创建开机自启动命令
 ​
 $ pm2 save                       # 保存当前应用列表
+
+$ pm2 resurrect                 # 重新加载保存的应用列表
+```
+
+### 相关 Linux 命令
+
+```bash
+ $ lsof -i:3000 # 查看3000端口占用
+ $ kill -9 XXX # SIGKILL：9号信号，Kill signal（杀死进程信号，linux规定进程不可以忽略这个信号）
 ```
 
 ### nuxt.js 官网
