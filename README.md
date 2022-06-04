@@ -30,11 +30,17 @@ $ npm run dev
 $ npm run build
 $ npm run start
 
-# 查看目录（打包构建不会生成像vue脚手架一样的dist目录，而是.nuxt目录）
-$ ls -lf
-
 # generate static project
+# generate：构建应用程序并生成每个路径作为HTML文件（用于静态托管）
+# 使用generate打包后每个对应的页面都会生成一个html，你在打包的时候不能关闭后台，他会请求后台数据生成首屏的数据
+# 这样打包有一个弊端，当你首屏的数据发生更改的时候，他还是显示的是之前的数据，要想改变的话，需要重新打包发布才行。
+# 所以，如果首屏是动态的就不建议使用这种打包方式了。
+# 有人看到每个页面都生成了HTML页面，以为不再请求后台（我最开始就是这样认为的），实际上不是的，他的首屏数据之前渲染好了，但是其它数据还是从后台获取，比如翻页，第二页数据是从新请求后台的，你再次返回第一页也是再次请求的。
+# 使用generate打包和之前使用vue打包一样，生成一个dist文件夹，然后各种发布操作和vue一样的
 $ npm run generate
+
+# 预览发布环境效果
+$ npm run preview
 ```
 
 ## 服务器部署（nginx）
@@ -167,14 +173,15 @@ $ pm2 startup                    # 创建开机自启动命令
 ​
 $ pm2 save                       # 保存当前应用列表
 
-$ pm2 resurrect                 # 重新加载保存的应用列表
+$ pm2 resurrect                  # 重新加载保存的应用列表
 ```
 
 ### 相关 Linux 命令
 
 ```bash
  $ lsof -i:3000 # 查看3000端口占用
- $ kill -9 XXX # SIGKILL：9号信号，Kill signal（杀死进程信号，linux规定进程不可以忽略这个信号）
+ $ kill -9 XXX  # SIGKILL：9号信号，Kill signal（杀死进程信号，linux规定进程不可以忽略这个信号）
+ $ ls -lf       # 查看全部目录
 ```
 
 ### nuxt.js 官网
